@@ -1,0 +1,13 @@
+{
+    "req": {
+        "type": "addUsersToTest",
+        "sid": "ASF5SD3242V2DGSEHB",
+        "quiz_id": 1,
+        "dataType": "class/studnet",
+        "class": 1,
+        "student": 5
+    },
+    "res": {
+        "success": true
+    }
+}

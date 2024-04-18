@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="MyDb" id="Project_114c" database="MySql" >
+	<schema name="amirkabir_db" >
+		<table name="tbl_admin" row_count="2" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" autoincrement="y" >
+				<comment><![CDATA[لیست مدیر ها و معلمان
+معلم باید به کلاس ها متصل شود]]></comment>
+			</column>
+			<column name="fname" type="varchar" length="255" decimal="0" jt="12" mandatory="y" />
+			<column name="lname" type="varchar" length="255" decimal="0" jt="12" mandatory="y" />
+			<column name="username" type="varchar" length="255" decimal="0" jt="12" mandatory="y" />
+			<column name="password" type="varchar" length="255" decimal="0" jt="12" mandatory="y" />
+			<column name="email" type="varchar" length="255" decimal="0" jt="12" mandatory="y" />
+			<column name="phone" type="varchar" length="11" decimal="0" jt="12" mandatory="y" />
+			<column name="location" type="varchar" length="255" decimal="0" jt="12" mandatory="y" />
+			<column name="ismodir" prior="isadmin" type="boolean" length="1" decimal="0" jt="-7" mandatory="y" >
+				<comment><![CDATA[با ismodir تفاوت معلم و مدیر شناخته میشود]]></comment>
+			</column>
+			<column name="school_id" prior="schoolnum" type="int" length="10" decimal="0" jt="4" >
+				<comment><![CDATA[مدیر باید به یک مدرسه متصل شود]]></comment>
+			</column>
+			<column name="personnel_code" type="int" length="10" decimal="0" jt="4" mandatory="y" >
+				<comment><![CDATA[کد پرسنلی افراد
+در آموزش و پرورش ثبت میشود]]></comment>
+			</column>
+			<index name="pk_tbl_admin" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="email" unique="UNIQUE_KEY" >
+				<column name="email" />
+			</index>
+			<index name="personnel_code" unique="UNIQUE_KEY" >
+				<column name="personnel_code" />
+			</index>
+			<index name="phone" unique="UNIQUE_KEY" >
+				<column name="phone" />
+			</index>
+			<index name="username" unique="UNIQUE_KEY" >
+				<column name="username" />
+			</index>
+			<index name="school_id" unique="UNIQUE_KEY" >
+				<column name="school_id" />
+				<column name="ismodir" />
+			</index>
+			<fk name="fk_tbl_admin_tbl_school" to_schema="amirkabir_db" to_table="tbl_school" delete_action="setNull" update_action="setNull" >
+				<fk_column name="school_id" pk="id" />
+			</fk>
+		</table>
+		<table name="tbl_admin_class" >
+			<column name="admin_id" type="int" jt="4" mandatory="y" >
+				<comment><![CDATA[نشان دهنده این است که معلم به کدام کلاس ها دسترسی دارد]]></comment>
+			</column>
+			<column name="class_id" type="int" jt="4" mandatory="y" />
+			<index name="idx_tbl_admin_class" unique="PRIMARY_KEY" >
+				<column name="admin_id" />
+				<column name="class_id" />
+			</index>
+			<index name="fk_tbl_admin_class_tbl_class" unique="NORMAL" >
+				<column name="class_id" />
+			</index>
+			<fk name="fk_tbl_admin_class_tbl_admin" to_schema="amirkabir_db" to_table="tbl_admin" >
+				<fk_column name="admin_id" pk="id" />
+			</fk>
+			<fk name="fk_tbl_admin_class_tbl_class" to_schema="amirkabir_db" to_table="tbl_class" >
+				<fk_column name="class_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="tbl_admin_question" >
+			<column name="admin_id" type="int" jt="4" mandatory="y" >
+				<comment><![CDATA[ممشخص کردن نویسنده یا ادمین هر سوال]]></comment>
+			</column>
+			<column name="question_id" type="int" jt="4" mandatory="y" />
+			<index name="idx_tbl_admin_question" unique="PRIMARY_KEY" >
+				<column name="admin_id" />
+				<column name="question_id" />
+			</index>
+			<index name="fk_tbl_admin_question_tbl_question" unique="NORMAL" >
+				<column name="question_id" />
+			</index>
+			<fk name="fk_tbl_admin_question_tbl_admin" to_schema="amirkabir_db" to_table="tbl_admin" >
+				<fk_column name="admin_id" pk="id" />
+			</fk>
+			<fk name="fk_tbl_admin_question_tbl_question" to_schema="amirkabir_db" to_table="tbl_question" >
+				<fk_column name="question_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="tbl_answer" row_count="2" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" autoincrement="y" >
+				<comment><![CDATA[لیست پاسخ ها]]></comment>
+			</column>
+			<column name="question_id" prior="questionid" type="int" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="iscorect" type="boolean" length="1" decimal="0" jt="-7" mandatory="y" />
+			<column name="text" type="text" length="65535" decimal="0" jt="-1" mandatory="y" />
+			<column name="switch" type="int" length="10" decimal="0" jt="4" mandatory="y" >
+				<comment><![CDATA[ایدی جواب در یک سوال به خصوص
+مثلا 1,2,3,4
+1,2
+1,2,3]]></comment>
+			</column>
+			<index name="pk_tbl_answer" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fk_tbl_answer_tbl_question" unique="NORMAL" >
+				<column name="question_id" />
+			</index>
+			<index name="idx_tbl_answer_0" unique="UNIQUE_KEY" >
+				<column name="question_id" />
+				<column name="text" />
+			</index>
+			<fk name="fk_tbl_answer_tbl_question" to_schema="amirkabir_db" to_table="tbl_question" >
+				<fk_column name="question_id" pk="id" />
+			</fk>
+		</table>
+		<table name="tbl_class" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" autoincrement="y" >
+				<comment><![CDATA[لیست کلاس ها]]></comment>
+			</column>
+			<column name="school_id" prior="schoolnum" type="int" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<column name="grade_id" prior="gradeid" type="int" length="10" decimal="0" jt="4" mandatory="y" />
+			<index name="pk_tbl_class" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fk_tbl_class_tbl_grade" unique="NORMAL" >
+				<column name="grade_id" />
+			</index>
+			<index name="school_id" unique="UNIQUE_KEY" >
+				<column name="school_id" />
+				<column name="name" />
+			</index>
+			<fk name="fk_tbl_class_tbl_school" to_schema="amirkabir_db" to_table="tbl_school" delete_action="restrict" update_action="restrict" >
+				<fk_column name="school_id" pk="id" />
+			</fk>
+			<fk name="fk_tbl_class_tbl_grade_0" to_schema="amirkabir_db" to_table="tbl_grade" >
+				<fk_column name="grade_id" pk="id" />
+			</fk>
+		</table>
+		<table name="tbl_dars" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" autoincrement="y" >
+				<comment><![CDATA[لیست درس ها 
+باید با این فرمت باشد
+ریاضی - فنی , فارسی - تجربی]]></comment>
+			</column>
+			<column name="name" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<column name="grade_id" prior="gradeid" type="int" length="10" decimal="0" jt="4" mandatory="y" />
+			<index name="pk_tbl_dars" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fk_tbl_dars_tbl_grade" unique="NORMAL" >
+				<column name="grade_id" />
+			</index>
+			<index name="idx_tbl_dars" unique="UNIQUE_KEY" >
+				<column name="name" />
+				<column name="grade_id" />
+			</index>
+			<fk name="fk_tbl_dars_tbl_grade_0" to_schema="amirkabir_db" to_table="tbl_grade" >
+				<fk_column name="grade_id" pk="id" />
+			</fk>
+		</table>
+		<table name="tbl_fasl" >
+			<column name="id" type="int" jt="4" mandatory="y" autoincrement="y" />
+			<column name="fasl" type="text" jt="-1" mandatory="y" />
+			<column name="dars_id" type="int" jt="4" mandatory="y" />
+			<index name="pk_tbl_fasl_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fk_tbl_fasl_tbl_dars" unique="NORMAL" >
+				<column name="dars_id" />
+			</index>
+			<fk name="fk_tbl_fasl_tbl_dars" to_schema="amirkabir_db" to_table="tbl_dars" >
+				<fk_column name="dars_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="tbl_fixed_scores" >
+			<column name="id" type="int" jt="4" mandatory="y" autoincrement="y" />
+			<column name="user_id" type="int" jt="4" mandatory="y" />
+			<column name="quiz_id" type="int" jt="4" mandatory="y" />
+			<column name="calculated_score" type="int" jt="4" mandatory="y" />
+			<index name="pk_tbl_fixed_scores_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fk_tbl_fixed_scores_tbl_quiz" unique="NORMAL" >
+				<column name="quiz_id" />
+			</index>
+			<index name="fk_tbl_fixed_scores_tbl_user" unique="NORMAL" >
+				<column name="user_id" />
+			</index>
+			<fk name="fk_tbl_fixed_scores_tbl_quiz" to_schema="amirkabir_db" to_table="tbl_quiz" >
+				<fk_column name="quiz_id" pk="id" />
+			</fk>
+			<fk name="fk_tbl_fixed_scores_tbl_user" to_schema="amirkabir_db" to_table="tbl_user" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="tbl_grade" row_count="1" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" >
+				<comment><![CDATA[لیست پایه ها]]></comment>
+			</column>
+			<column name="grade" type="varchar" length="30" decimal="0" jt="12" mandatory="y" />
+			<index name="pk_tbl_grade" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="idx_tbl_grade" unique="UNIQUE_KEY" >
+				<column name="grade" />
+			</index>
+		</table>
+		<table name="tbl_ostan" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" autoincrement="y" >
+				<comment><![CDATA[لیست استان ها]]></comment>
+			</column>
+			<column name="name" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<index name="pk_tbl_ostan" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="tbl_participate" >
+			<column name="id" type="int" jt="4" mandatory="y" autoincrement="y" />
+			<column name="user_id" type="int" jt="4" mandatory="y" />
+			<column name="quiz_id" type="int" jt="4" mandatory="y" />
+			<column name="start_time" type="int" jt="4" >
+				<comment><![CDATA[its timestamp]]></comment>
+			</column>
+			<index name="pk_tbl_participate_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fk_tbl_participate_tbl_quiz" unique="NORMAL" >
+				<column name="quiz_id" />
+			</index>
+			<index name="fk_tbl_participate_tbl_user" unique="NORMAL" >
+				<column name="user_id" />
+			</index>
+			<fk name="fk_tbl_participate_tbl_quiz" to_schema="amirkabir_db" to_table="tbl_quiz" >
+				<fk_column name="quiz_id" pk="id" />
+			</fk>
+			<fk name="fk_tbl_participate_tbl_user" to_schema="amirkabir_db" to_table="tbl_user" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="tbl_privacy" >
+			<column name="id" type="int" jt="4" mandatory="y" autoincrement="y" />
+			<column name="ispublic" type="boolean" jt="-7" mandatory="y" />
+			<column name="question_id" type="int" jt="4" mandatory="y" />
+			<index name="pk_tbl_privacy_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fk_tbl_privacy_tbl_question" unique="NORMAL" >
+				<column name="question_id" />
+			</index>
+			<fk name="fk_tbl_privacy_tbl_question" to_schema="amirkabir_db" to_table="tbl_question" >
+				<fk_column name="question_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="tbl_question" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" autoincrement="y" >
+				<comment><![CDATA[لیست سوالات]]></comment>
+			</column>
+			<column name="text" type="text" length="65535" decimal="0" jt="-1" mandatory="y" />
+			<column name="score" type="int" length="10" decimal="0" jt="4" mandatory="y" >
+				<comment><![CDATA[نمره هر سوال]]></comment>
+			</column>
+			<column name="level" type="int" jt="4" />
+			<index name="pk_tbl_question" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+		</table>
+		<table name="tbl_question_quiz" >
+			<column name="quiz_id" type="int" jt="4" mandatory="y" >
+				<comment><![CDATA[اتصال سوالات به آزمون
+نشان دهنده این است که در یک ازمون چه سوال هایی استفاده شده است]]></comment>
+			</column>
+			<column name="question_id" type="int" jt="4" mandatory="y" />
+			<index name="idx_tbl_question_quiz" unique="PRIMARY_KEY" >
+				<column name="quiz_id" />
+				<column name="question_id" />
+			</index>
+			<index name="fk_tbl_question_quiz_tbl_question" unique="NORMAL" >
+				<column name="question_id" />
+			</index>
+			<fk name="fk_tbl_question_quiz_tbl_quiz" to_schema="amirkabir_db" to_table="tbl_quiz" >
+				<fk_column name="quiz_id" pk="id" />
+			</fk>
+			<fk name="fk_tbl_question_quiz_tbl_question_0" to_schema="amirkabir_db" to_table="tbl_question" >
+				<fk_column name="question_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="tbl_quiz" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" autoincrement="y" >
+				<comment><![CDATA[لیست آزمون ها]]></comment>
+			</column>
+			<column name="name" type="varchar" length="30" decimal="0" jt="12" mandatory="y" />
+			<column name="admin_id" prior="adminnum" type="int" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="level" type="int" jt="4" />
+			<column name="fasl_id" type="int" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="deleted" type="boolean" jt="-7" >
+				<defo><![CDATA[false]]></defo>
+			</column>
+			<index name="pk_tbl_quiz" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fk_tbl_quiz_tbl_admin" unique="NORMAL" >
+				<column name="admin_id" />
+			</index>
+			<index name="fk_tbl_quiz_tbl_dars" unique="NORMAL" >
+				<column name="fasl_id" />
+			</index>
+			<fk name="fk_tbl_quiz_tbl_admin" to_schema="amirkabir_db" to_table="tbl_admin" >
+				<fk_column name="admin_id" pk="id" />
+			</fk>
+			<fk name="fk_tbl_quiz_tbl_fasl" to_schema="amirkabir_db" to_table="tbl_fasl" >
+				<fk_column name="fasl_id" pk="id" />
+			</fk>
+		</table>
+		<table name="tbl_quiz_class" >
+			<column name="quiz_id" type="int" jt="4" mandatory="y" >
+				<comment><![CDATA[نشان دهنده این است که یک ازمون برای کدام کلاس ها تعریف شده است]]></comment>
+			</column>
+			<column name="class_id" type="int" jt="4" mandatory="y" />
+			<index name="idx_tbl_quiz_class" unique="PRIMARY_KEY" >
+				<column name="quiz_id" />
+				<column name="class_id" />
+			</index>
+			<index name="fk_tbl_quiz_class_tbl_class" unique="NORMAL" >
+				<column name="class_id" />
+			</index>
+			<fk name="fk_tbl_quiz_class_tbl_class" to_schema="amirkabir_db" to_table="tbl_class" >
+				<fk_column name="class_id" pk="id" />
+			</fk>
+			<fk name="fk_tbl_quiz_class_tbl_quiz" to_schema="amirkabir_db" to_table="tbl_quiz" >
+				<fk_column name="quiz_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="tbl_quiz_user" >
+			<column name="quiz_id" type="int" jt="4" mandatory="y" >
+				<comment><![CDATA[نشان دهنده این است که آزمون برای کدام دانش آموزان تعریف شده است]]></comment>
+			</column>
+			<column name="user_id" type="int" jt="4" mandatory="y" />
+			<index name="idx_tbl_quiz_user" unique="PRIMARY_KEY" >
+				<column name="quiz_id" />
+				<column name="user_id" />
+			</index>
+			<index name="fk_tbl_quiz_user_tbl_user" unique="NORMAL" >
+				<column name="user_id" />
+			</index>
+			<fk name="fk_tbl_quiz_user_tbl_user" to_schema="amirkabir_db" to_table="tbl_user" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+			<fk name="fk_tbl_quiz_user_tbl_quiz" to_schema="amirkabir_db" to_table="tbl_quiz" >
+				<fk_column name="quiz_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="tbl_region" >
+			<column name="id" type="int" jt="4" mandatory="y" autoincrement="y" >
+				<comment><![CDATA[لیست نواحی]]></comment>
+			</column>
+			<column name="name" type="varchar" length="100" jt="12" mandatory="y" />
+			<column name="shahr_id" type="int" jt="4" mandatory="y" />
+			<index name="pk_tbl_region_id" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fk_tbl_region_tbl_shahr" unique="NORMAL" >
+				<column name="shahr_id" />
+			</index>
+			<index name="idx_tbl_region" unique="UNIQUE_KEY" >
+				<column name="shahr_id" />
+				<column name="name" />
+			</index>
+			<fk name="fk_tbl_region_tbl_shahr" to_schema="amirkabir_db" to_table="tbl_shahr" >
+				<fk_column name="shahr_id" pk="id" />
+			</fk>
+			<options><![CDATA[engine=InnoDB]]></options>
+		</table>
+		<table name="tbl_school" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" autoincrement="y" >
+				<comment><![CDATA[لیست مدارس]]></comment>
+			</column>
+			<column name="name" type="varchar" length="255" decimal="0" jt="12" mandatory="y" />
+			<column name="school_code" type="int" length="10" decimal="0" jt="4" mandatory="y" >
+				<comment><![CDATA[کد مدرسه
+ثبت شده در آموزش و پرورش]]></comment>
+			</column>
+			<column name="region_id" prior="region" type="int" length="10" decimal="0" jt="4" mandatory="y" />
+			<index name="fk_tbl_school_tbl_region" unique="NORMAL" >
+				<column name="region_id" />
+			</index>
+			<index name="pk_tbl_school" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="school_code" unique="UNIQUE_KEY" >
+				<column name="school_code" />
+				<column name="region_id" />
+			</index>
+			<fk name="fk_tbl_school_tbl_region" to_schema="amirkabir_db" to_table="tbl_region" >
+				<fk_column name="region_id" pk="id" />
+			</fk>
+		</table>
+		<table name="tbl_shahr" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" autoincrement="y" >
+				<comment><![CDATA[لیست شهر ها]]></comment>
+			</column>
+			<column name="ostan_id" prior="ostannum" type="int" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="name" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<index name="pk_tbl_shahr" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fk_tbl_shahr_tbl_ostan" unique="NORMAL" >
+				<column name="ostan_id" />
+			</index>
+			<fk name="fk_tbl_shahr_tbl_ostan_0" to_schema="amirkabir_db" to_table="tbl_ostan" >
+				<fk_column name="ostan_id" pk="id" />
+			</fk>
+		</table>
+		<table name="tbl_sid" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" autoincrement="y" />
+			<column name="sid" type="text" length="65535" decimal="0" jt="-1" mandatory="y" />
+			<column name="userid" type="int" length="10" decimal="0" jt="4" />
+			<column name="adminid" type="int" length="10" decimal="0" jt="4" />
+			<index name="pk_tbl_sid" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fk_tbl_sid_tbl_admin" unique="NORMAL" >
+				<column name="adminid" />
+			</index>
+			<index name="fk_tbl_sid_tbl_user" unique="NORMAL" >
+				<column name="userid" />
+			</index>
+			<fk name="fk_tbl_sid_tbl_admin" to_schema="amirkabir_db" to_table="tbl_admin" delete_action="restrict" update_action="restrict" >
+				<fk_column name="adminid" pk="id" />
+			</fk>
+			<fk name="fk_tbl_sid_tbl_user" to_schema="amirkabir_db" to_table="tbl_user" delete_action="restrict" update_action="restrict" >
+				<fk_column name="userid" pk="id" />
+			</fk>
+		</table>
+		<table name="tbl_user" row_count="0" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" autoincrement="y" >
+				<comment><![CDATA[لیست دانش آموزان
+باید بین شماره تلفن یا ایمیل حداقل یک مورد وارد شود]]></comment>
+			</column>
+			<column name="fname" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<column name="lname" type="varchar" length="35" decimal="0" jt="12" mandatory="y" />
+			<column name="username" type="varchar" length="16" decimal="0" jt="12" mandatory="y" />
+			<column name="password" type="varchar" length="255" decimal="0" jt="12" mandatory="y" />
+			<column name="email" type="varchar" length="255" decimal="0" jt="12" />
+			<column name="phone" type="varchar" length="11" decimal="0" jt="12" />
+			<column name="location" type="varchar" length="255" jt="12" />
+			<column name="address" type="text" length="65535" decimal="0" jt="-1" />
+			<column name="class_id" prior="classnum" type="int" length="10" decimal="0" jt="4" mandatory="y" />
+			<index name="pk_tbl_user" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fname" unique="NORMAL" >
+				<column name="fname" />
+			</index>
+			<index name="username" unique="UNIQUE_KEY" >
+				<column name="username" />
+			</index>
+			<index name="fk_tbl_user_tbl_class" unique="NORMAL" >
+				<column name="class_id" />
+			</index>
+			<fk name="fk_tbl_user_tbl_class" to_schema="amirkabir_db" to_table="tbl_class" >
+				<fk_column name="class_id" pk="id" />
+			</fk>
+		</table>
+		<table name="tbl_useranswer" row_count="1" >
+			<column name="id" type="int" length="10" decimal="0" jt="4" mandatory="y" autoincrement="y" >
+				<comment><![CDATA[لیست پاسخ های دانش آموزان به سوالات]]></comment>
+			</column>
+			<column name="user_id" prior="userid" type="int" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="quiz_id" prior="quizid" type="int" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="quiestion_id" prior="quiestionid" type="int" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="answer_id" prior="answerid" type="int" length="10" decimal="0" jt="4" mandatory="y" />
+			<index name="pk_tbl_useranswer" unique="PRIMARY_KEY" >
+				<column name="id" />
+			</index>
+			<index name="fk_tbl_useranswer_tbl_answer" unique="NORMAL" >
+				<column name="answer_id" />
+			</index>
+			<index name="fk_tbl_useranswer_tbl_question" unique="NORMAL" >
+				<column name="quiestion_id" />
+			</index>
+			<index name="fk_tbl_useranswer_tbl_quiz" unique="NORMAL" >
+				<column name="quiz_id" />
+			</index>
+			<index name="fk_tbl_useranswer_tbl_user" unique="NORMAL" >
+				<column name="user_id" />
+			</index>
+			<fk name="fk_tbl_useranswer_tbl_user_0" to_schema="amirkabir_db" to_table="tbl_user" >
+				<fk_column name="user_id" pk="id" />
+			</fk>
+			<fk name="fk_tbl_useranswer_tbl_quiz_0" to_schema="amirkabir_db" to_table="tbl_quiz" delete_action="cascade" update_action="cascade" >
+				<fk_column name="quiz_id" pk="id" />
+			</fk>
+			<fk name="fk_tbl_useranswer_tbl_question_0" to_schema="amirkabir_db" to_table="tbl_question" >
+				<fk_column name="quiestion_id" pk="id" />
+			</fk>
+			<fk name="fk_tbl_useranswer_tbl_answer_0" to_schema="amirkabir_db" to_table="tbl_answer" >
+				<fk_column name="answer_id" pk="id" />
+			</fk>
+		</table>
+	</schema>
+	<connector name="MyDb" database="MySql" driver_class="com.mysql.jdbc.Driver" driver_jar="mysql-connector-java-8.0.21.jar" driver_desc="Standard" host="localhost" port="3306" user="root" />
+	<layout name="Sample Layout with Tools" id="Layout_17df" show_column_type="y" show_relation="columns" >
+		<comment><![CDATA[MyDb]]></comment>
+		<entity schema="amirkabir_db" name="tbl_admin" color="BED3F4" x="624" y="608" />
+		<entity schema="amirkabir_db" name="tbl_admin_class" color="C1D8EE" x="416" y="720" />
+		<entity schema="amirkabir_db" name="tbl_admin_question" color="C1D8EE" x="816" y="560" />
+		<entity schema="amirkabir_db" name="tbl_answer" color="E6E6B3" x="1344" y="736" />
+		<entity schema="amirkabir_db" name="tbl_class" color="E699B3" x="80" y="720" />
+		<entity schema="amirkabir_db" name="tbl_dars" color="E699B3" x="80" y="1072" />
+		<entity schema="amirkabir_db" name="tbl_fasl" color="C1D8EE" x="1008" y="1072" />
+		<entity schema="amirkabir_db" name="tbl_fixed_scores" color="C1D8EE" x="1488" y="352" />
+		<entity schema="amirkabir_db" name="tbl_grade" color="E699B3" x="48" y="928" />
+		<entity schema="amirkabir_db" name="tbl_ostan" color="BED3F4" x="80" y="80" />
+		<entity schema="amirkabir_db" name="tbl_participate" color="C1D8EE" x="1344" y="336" />
+		<entity schema="amirkabir_db" name="tbl_privacy" color="C1D8EE" x="1552" y="496" />
+		<entity schema="amirkabir_db" name="tbl_question" color="E6E6B3" x="1360" y="592" />
+		<entity schema="amirkabir_db" name="tbl_question_quiz" color="3986C1" x="1536" y="912" />
+		<entity schema="amirkabir_db" name="tbl_quiz" color="E6E6B3" x="992" y="768" />
+		<entity schema="amirkabir_db" name="tbl_quiz_class" color="C1D8EE" x="336" y="848" />
+		<entity schema="amirkabir_db" name="tbl_quiz_user" color="C1D8EE" x="1008" y="656" />
+		<entity schema="amirkabir_db" name="tbl_region" color="C1D8EE" x="80" y="368" />
+		<entity schema="amirkabir_db" name="tbl_school" color="E699B3" x="48" y="560" />
+		<entity schema="amirkabir_db" name="tbl_shahr" color="BED3F4" x="80" y="224" />
+		<entity schema="amirkabir_db" name="tbl_sid" color="3986C1" x="672" y="336" />
+		<entity schema="amirkabir_db" name="tbl_user" color="C7F4BE" x="1072" y="320" />
+		<entity schema="amirkabir_db" name="tbl_useranswer" color="E6E6B3" x="1152" y="624" />
+		<group name="Group_Region" color="CC6633" >
+			<entity schema="amirkabir_db" name="tbl_ostan" />
+			<entity schema="amirkabir_db" name="tbl_region" />
+			<entity schema="amirkabir_db" name="tbl_shahr" />
+		</group>
+		<group name="Group_dars" color="E699B3" >
+			<entity schema="amirkabir_db" name="tbl_dars" />
+			<entity schema="amirkabir_db" name="tbl_grade" />
+			<entity schema="amirkabir_db" name="tbl_class" />
+			<entity schema="amirkabir_db" name="tbl_school" />
+		</group>
+		<group name="Group_quiz" color="E6E6B3" >
+			<entity schema="amirkabir_db" name="tbl_answer" />
+			<entity schema="amirkabir_db" name="tbl_useranswer" />
+			<entity schema="amirkabir_db" name="tbl_question" />
+			<entity schema="amirkabir_db" name="tbl_quiz" />
+		</group>
+		<script name="Sample SQL Editor" id="Editor_11c5" language="SQL" >
+			<string><![CDATA[insert  id, name, shahrcod
+FROM
+	amirkabir_db.tbl_school l;]]></string>
+		</script>
+		<script name="tbl_admin_question" id="Editor_1985" language="SQL" >
+			<string><![CDATA[INSERT INTO amirkabir_db.tbl_admin_question
+	( admin_id, question_id) VALUES ( ?, ? );]]></string>
+		</script>
+		<script name="tbl_answer" id="Editor_717" language="SQL" >
+			<string><![CDATA[INSERT INTO amirkabir_db.tbl_answer
+	( id, question_id, iscorect, `text`, switch) VALUES ( ?, ?, ?, ?, ? );]]></string>
+		</script>
+		<script name="tbl_answer_003" id="Editor_5a8" language="SQL" >
+			<string><![CDATA[INSERT INTO amirkabir_db.tbl_answer
+	( id, question_id, iscorect, `text`, switch) VALUES ( ?, ?, ?, ?, ? );]]></string>
+		</script>
+		<script name="tbl_question" id="Editor_2565" language="SQL" >
+			<string><![CDATA[INSERT INTO amirkabir_db.tbl_question
+	( id, `text`, score, level) VALUES ( ?, ?, ?, ? );]]></string>
+		</script>
+		<script name="tbl_question_quiz" id="Editor_1b35" language="SQL" >
+			<string><![CDATA[INSERT INTO amirkabir_db.tbl_question_quiz
+	( quiz_id, question_id) VALUES ( ?, ? );]]></string>
+		</script>
+		<script name="tbl_useranswer" id="Editor_18f" language="SQL" >
+			<string><![CDATA[INSERT INTO amirkabir_db.tbl_useranswer
+	( id, user_id, quiz_id, quiestion_id, answer_id) VALUES ( ?, ?, ?, ?, ? );]]></string>
+		</script>
+		<query id="Query_38d" name="tbl_user_001" >
+			<query_table schema="amirkabir_db" name="tbl_user" alias="tu" x="48" y="48" >
+				<column name="id" />
+				<column name="fname" />
+				<column name="lname" />
+				<column name="location" />
+				<column name="address" />
+				<column name="id" filter=":c = 1" />
+				<query_table schema="amirkabir_db" name="tbl_class" alias="tc" x="272" y="144" fk="fk_tbl_user_tbl_class" type="Inner Join" >
+					<column name="name" />
+					<query_table schema="amirkabir_db" name="tbl_school" alias="ts" x="432" y="176" fk="fk_tbl_class_tbl_school" type="Inner Join" >
+						<column name="name" />
+						<column name="school_code" />
+						<query_table schema="amirkabir_db" name="tbl_admin" alias="ta" x="672" y="96" fk="fk_tbl_admin_tbl_school" type="Inner Join" >
+							<column name="fname" />
+							<column name="lname" />
+						</query_table>
+					</query_table>
+				</query_table>
+			</query_table>
+		</query>
+	</layout>
+</project>

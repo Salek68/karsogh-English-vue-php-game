@@ -1,0 +1,19 @@
+{
+    "req": {
+        "darsId": "2"
+    },
+    "res": [
+        {
+            "id": 1,
+            "name": "fasl 1"
+        },
+        {
+            "id": 2,
+            "name": "fasl 2"
+        },
+        {
+            "id": 3,
+            "name": "fasl 3"
+        }
+    ]
+}

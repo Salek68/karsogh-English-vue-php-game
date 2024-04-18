@@ -1,0 +1,29 @@
+{
+  "name": "yogeshkoli/user-ip",
+  "description": "PHP Class to get active user IP Address.",
+  "type": "Library",
+  "keywords": [
+    "IP Address",
+    "Get Current user IP Address",
+    "REMOTE_ADDR",
+    "PHP IP Address"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Yogesh Koli",
+      "email": "info@yogeshkoli.com",
+      "homepage": "http://www.yogeshkoli.com",
+      "role": "Developer"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": ">=5.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "YogeshKoli\\UserIP\\": "src/"
+    }
+  }
+}

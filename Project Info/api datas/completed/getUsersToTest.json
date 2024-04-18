@@ -1,0 +1,18 @@
+{
+    "req": {
+        "type": "addUsersToTest",
+        "sid": "ASF5SD3242V2DGSEHB",
+        "quiz_id": 1
+    },
+    "res": {
+        "class": [
+            "203",
+            "201"
+        ],
+        "users": [
+            "ali hashemi",
+            "akbar mazandarani"
+        ],
+        "success": true
+    }
+}

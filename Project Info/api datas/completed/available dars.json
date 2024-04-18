@@ -1,0 +1,18 @@
+{
+   
+    "req": {
+       
+    },
+    "res": [
+        {
+            "id":1,
+            "name":"farsi"
+        },        {
+            "id":2,
+            "name":"rizai"
+        },        {
+            "id":3,
+            "name":"olom"
+        }
+    ]
+}

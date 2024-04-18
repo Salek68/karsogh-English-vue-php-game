@@ -1,0 +1,20 @@
+{
+    "req": {
+        "type": "quizWizard",
+        "quiz_id": 1,
+        "sid": "ASF5SD3242V2DGSEHB",
+        "fasl_id": 2,
+        "classified": "true/false",
+        "questions": {
+            "hard": 7,
+            "medium": 3,
+            "easy": 10
+        },
+        "question_count": 6,
+        "difficulty": 2
+    },
+    "res": {
+        "msg": "Ok",
+        "success": true
+    }
+}

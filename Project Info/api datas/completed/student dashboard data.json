@@ -1,0 +1,13 @@
+{
+    "req": {
+        "type":"SiteDetail",
+        "sid": "ASF5SD3242V2DGSEHB"
+    },
+    "res": {
+        "AllQuizCounts": 15,
+        "CompletedQuizCounts": 10,
+        "NotCompletedQuizCounts": 5,
+        "avgYourScores": 18.75,
+        "success": true
+    }
+}

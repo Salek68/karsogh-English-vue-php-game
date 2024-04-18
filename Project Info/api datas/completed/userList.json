@@ -1,0 +1,21 @@
+{
+    "req": {
+        "type":"studentList",
+        "sid": "ASF5SD3242V2DGSEHB"
+    },
+    "res": {
+        "users": [
+            {
+                "name": "محمد کریمی",
+                "id": "1",
+                "classId": "1"
+            },
+            {
+                "name": "صالح کشاورز",
+                "id": "2",
+                "classId": "1"
+            }
+        ],
+        "success": true
+    }
+}
